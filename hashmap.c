@@ -108,28 +108,6 @@ HashMap * createMap(long capacity)
 }
 
 /*4.- Implemente la función void eraseMap(HashMap * map, char * key). Está función elimina el dato correspondiente a la clave key. Para hacerlo debe buscar el dato y luego marcarlo para que no sea válido. No elimine el par, sólo invalídelo asignando NULL a la clave (pair->key=NULL). Recuerde actualizar la variable size.*/
-/*
-void eraseMap(HashMap *map, char *key) 
-{
-  if (map == NULL) 
-  {
-    return;
-  }
-  long posicion = hash(key, map->capacity);
-  while (map->buckets[posicion] != NULL && map->buckets[posicion]->key != NULL) 
-  {
-    if (is_equal(map->buckets[posicion]->key, key) == 1) 
-    {
-      free(map->buckets[posicion]->key);
-      free(map->buckets[posicion]->value);
-      map->buckets[posicion] = NULL;
-      map->size--;
-      return;
-    }
-    posicion = (posicion + 1) % map->capacity;
-  }
-}
-*/
 void eraseMap(HashMap *map, char *key) 
 {
   if (map == NULL) 
@@ -190,6 +168,7 @@ Pair * searchMap(HashMap * map,  char * key)
   return NULL;
 }
 /*5.- Implemente las funciones para recorrer la estructura: Pair * firstMap(HashMap * map) retorna el primer Pair válido del arreglo buckets. Pair * nextMap(HashMap * map) retorna el siguiente Pair del arreglo buckets a partir índice current. Recuerde actualizar el índice.*/
+/*
 Pair * firstMap(HashMap * map) 
 {
   if(map==NULL)
@@ -203,6 +182,29 @@ Pair * firstMap(HashMap * map)
     }
   map->current = posicion;
   return map->buckets[posicion];
+}*/
+Pair * firstMap(HashMap * map) 
+{
+  if(map==NULL)
+  {
+    return NULL;
+  }
+
+  long posicion = 0;
+  while(posicion < map->capacity && (map->buckets[posicion] == NULL || map->buckets[posicion]->key == NULL))
+  {
+    posicion++;
+  }
+
+  if(posicion < map->capacity)
+  {
+    map->current = posicion;
+    return map->buckets[posicion];
+  }
+  else
+  {
+    return NULL; // No se encontró ningún par válido en el mapa
+  }
 }
 
 Pair * nextMap(HashMap * map) 
